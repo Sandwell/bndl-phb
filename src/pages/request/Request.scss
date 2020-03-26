@@ -1,0 +1,88 @@
+@import './../../assets/scss/colors';
+
+.request {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  .logo-graphic {
+    pointer-events: none;
+    animation: app-logo-shake infinite 1s linear;
+  }
+
+  .logo-name span {
+    font-size: 3rem;
+    font-family: 'Roboto-Bold';
+
+    &:last-child {
+      color: $red;
+    }
+  }
+
+  .subtitle {
+    text-align: center;
+  }
+
+  form {
+    position: relative;
+    margin-bottom: 20rem; // save space for auto-suggest
+
+    input {
+      padding: .5rem 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .auto-suggest {
+      position: absolute;
+      width: calc(100% - 2px);
+      max-height: 20rem;
+      overflow-y: scroll;
+      border: 1px solid $grey-lighter;
+
+      .bundle {
+        cursor: pointer;
+        padding: .5rem;
+
+        &:hover {
+          background: $grey-lighter;
+        }
+
+        .name {
+          font-family: 'Roboto-Bold';
+        }
+
+        .desc {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+}
+
+@keyframes app-logo-shake {
+
+  10%,
+  90% {
+    transform: translateY(-1px);
+  }
+
+  20%,
+  80% {
+    transform: translateY(1px);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translateY(-2px);
+  }
+
+  40%,
+  60% {
+    transform: translateY(2px);
+  }
+}
