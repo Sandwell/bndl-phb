@@ -3,7 +3,10 @@ import logo from './assets/logo.png';
 import './App.scss';
 
 
-type MyState = { value: string };
+type MyState = {
+  bundleName: string;
+  bundles: any[];
+};
 
 class App extends React.Component<{}, MyState> {
 
@@ -12,33 +15,42 @@ class App extends React.Component<{}, MyState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      value: ''
+      bundleName: '',
+      bundles: []
     }
   }
 
-  public componentDidUpdate(prevProps: {}, prevState: MyState) {
-    if (prevState.value !== this.state.value) {
-      this.handleCheck();
+  public componentDidUpdate(prevProps: {}, prevState: MyState): void {
+    if (prevState.bundleName !== this.state.bundleName && this.state.bundleName.length) {
+      this.handleDebounce();
     }
   }
 
-  private setValue(value: string): void {
-    this.setState({ value: value });
+  private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    this.setState({ bundleName: event.target.value });
   }
 
-  private handleCheck(): void {
+  private handleDebounce(): void {
     // Clears running timer and starts a new one each time the user types
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.fetchLibraries();
-    }, 2000);
+    }, 200);
   }
 
   private fetchLibraries(): void {
-    console.log('Call');
+    fetch(`/api/getBundleList?bundleName=${encodeURIComponent(this.state.bundleName)}`)
+      .then(res => res.json())
+      .then((result) => {
+        this.setState({
+          bundles: result
+        })
+      }, (error) => {
+        console.error(error);
+      });
   }
 
-  render() {
+  public render(): JSX.Element {
     return (
       <main className="app">
         <img src={logo} className="logo-graphic" alt="logo" />
@@ -46,8 +58,20 @@ class App extends React.Component<{}, MyState> {
           <span>BUNDLE</span>
           <span>CRINGE</span>
         </div>
-        <p>Do not take the risk to add an heavy package to use 10% of it.</p>
-        <input name="library" type="text" value={this.state.value} onChange={e => this.setValue(e.target.value)} placeholder="find package" />
+        <p className="subtitle">Do not take the risk to add an heavy package to use 10% of it.</p>
+        <form>
+          <input autoComplete="off" name="library" type="text" value={this.state.bundleName} onChange={(event) => this.handleChange(event)} placeholder="find package" />
+          {this.state.bundles.length ?
+            <div className="auto-suggest">
+              {this.state.bundles.map((module, i) =>
+                <div className="module" key={i}>
+                  <div className="module-name">{module.name}</div>
+                  <div className="module-desc">{module.description}</div>
+                </div>
+              )}
+            </div>
+            : null}
+        </form>
       </main>);
   }
 }
