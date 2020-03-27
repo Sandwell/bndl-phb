@@ -2,7 +2,9 @@ import React from 'react';
 import logo from './../../assets/images/logo.png';
 import './Request.scss';
 
-
+/**
+ * Type my custom state
+ */
 type MyState = {
   search: string;
   bundles: any[];
@@ -10,9 +12,9 @@ type MyState = {
 
 class Request extends React.Component<{}, MyState> {
 
-  private timer: any;
+  private timer: ReturnType<typeof setTimeout> = setTimeout(() => '', 200);
 
-  constructor(props: any) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       search: '',
@@ -20,28 +22,32 @@ class Request extends React.Component<{}, MyState> {
     }
   }
 
+  /**
+   * Trigger debounce time when component is updated and when uer has typed something
+   */
   public componentDidUpdate(prevProps: {}, prevState: MyState): void {
     if (prevState.search !== this.state.search && this.state.search.length) {
       this.handleDebounce();
     }
   }
 
-  public getBundleVersions(bundleName: string): void {
-    fetch(`/api/getBundleVersions?bundleName=${bundleName}`)
-      .then(res => res.json())
-      .then((result) => {
-        this.setState({
-          bundles: result
-        })
-      }, (error) => {
-        console.error(error);
-      });
+  /**
+   * Redirect to the bundle details page after user has selected a bundle
+   */
+  public getBundleDetails(bundle: any): void {
+    window.location.href = `/results?b=${bundle.name}&v=@${bundle.version}`;
   }
 
+  /**
+   * Set the correct value to the State
+   */
   private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({ search: event.target.value });
   }
 
+  /**
+   * Debounce handler in order to not spam the Back-End for each time the user types
+   */
   private handleDebounce(): void {
     // Clears running timer and starts a new one each time the user types
     clearTimeout(this.timer);
@@ -50,6 +56,9 @@ class Request extends React.Component<{}, MyState> {
     }, 200);
   }
 
+  /**
+   * Call Back-End in order to populate the auto-complete
+   */
   private getBundleList(): void {
     fetch(`/api/getBundleList?search=${encodeURIComponent(this.state.search)}`)
       .then(res => res.json())
@@ -62,6 +71,9 @@ class Request extends React.Component<{}, MyState> {
       });
   }
 
+  /**
+   * Classic render method
+   */
   public render(): JSX.Element {
     return (
       <main className="request">
@@ -74,14 +86,15 @@ class Request extends React.Component<{}, MyState> {
         <form>
           <input autoComplete="off" name="library" type="text" value={this.state.search} onChange={(event) => this.handleChange(event)} placeholder="find package" />
           {this.state.bundles.length ?
-            <div className="auto-suggest">
+            <ul className="auto-complete">
               {this.state.bundles.map((bundle, i) =>
-                <div className="bundle" key={i} onClick={(event) => this.getBundleVersions(bundle.name)}>
+                <li className="bundle" key={i} onClick={(event) => this.getBundleDetails(bundle)}>
                   <div className="name">{bundle.name}</div>
                   <div className="desc">{bundle.description}</div>
-                </div>
+                  <div className="version">@{bundle.version}</div>
+                </li>
               )}
-            </div>
+            </ul>
             : null}
         </form>
       </main>);

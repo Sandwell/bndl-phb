@@ -27,24 +27,31 @@
 
   form {
     position: relative;
+    width: 500px;
     margin-bottom: 20rem; // save space for auto-suggest
 
     input {
       padding: .5rem 1rem;
       font-size: 1.5rem;
       text-align: center;
+      width: 100%;
+      box-sizing: border-box; // so the input does not overflow the form
     }
 
-    .auto-suggest {
+    .auto-complete {
       position: absolute;
-      width: calc(100% - 2px);
+      width: calc(100% - 2px); // remove border size
       max-height: 20rem;
       overflow-y: scroll;
       border: 1px solid $grey-lighter;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
 
       .bundle {
         cursor: pointer;
-        padding: .5rem;
+        position: relative;
+        padding: .5rem 3.5rem .5rem .5rem;
 
         &:hover {
           background: $grey-lighter;
@@ -56,6 +63,14 @@
 
         .desc {
           font-size: 12px;
+        }
+
+        .version {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: .5rem;
+          font-size: .8rem;
         }
       }
     }
