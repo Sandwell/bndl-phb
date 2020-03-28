@@ -1,7 +1,11 @@
+/**
+ * Process versions of a package in order to 
+ * retrieve what we want : last 3 versions and the previous major version
+ */
 const version = (versions) => {
   let filteredVersions = [];
   let previousMajorVersion;
-  let previousMajorVersionFound;
+  let previousMajorVersionFound = false;
   Object.keys(versions)
     // Sort all versions by number because sometimes some patches are realeased after a next major version
     // The minus operator will cast the string into a number
@@ -20,13 +24,13 @@ const version = (versions) => {
         filteredVersions.push(v);
       }
       if (v.startsWith(previousMajorVersion) && vArr[2] === '0' && !previousMajorVersionFound) {
-        // Here we use a flag because others older versions will satisfy the condition
+        // Here we use a flag because others older versions will satisfy this condition
         // and we do not want to slice the array after
         previousMajorVersionFound = true;
         filteredVersions.push(v);
       }
       if (filteredVersions.length > 3) {
-        // We used some instead of filter so we can break the loop when we got our 4 needed versions
+        // We used some instead of filter method so we can break the loop when we got our 4 needed versions
         return true;
       }
     });

@@ -1,21 +1,21 @@
 import React from 'react';
 import './Results.scss';
 
+/**
+ * Interfaces
+ */
+interface MyProps { }
 
-type MyState = {
-
+interface MyState {
+  bundleName: string;
+  bundleVersion: string;
 };
 
-class Results extends React.Component<{}, MyState> {
+export default class Results extends React.Component<MyProps, MyState> {
 
   private urlParams = new URLSearchParams(window.location.search);
   private bundleName = this.urlParams.get('b');
   private bundleVersion = this.urlParams.get('v');
-
-  constructor(props: {}) {
-    super(props);
-    this.state = {};
-  }
 
   public componentDidMount(): void {
     this.getBundleDetails();
@@ -36,5 +36,3 @@ class Results extends React.Component<{}, MyState> {
       <p>hello</p>);
   }
 }
-
-export default Results;

@@ -8,25 +8,15 @@ import './App.scss';
 import Request from './pages/request/Request';
 import Results from './pages/results/Results';
 
-
-type MyState = {
-  bundleName: string;
-  bundles: any[];
-};
-
-class App extends React.Component<{}, MyState> {
+class App extends React.Component<{}, {}> {
 
   public render(): JSX.Element {
     return (
       <main className="app">
         <Router>
           <Switch>
-            <Route path="/results">
-              <Results />
-            </Route>
-            <Route path="/">
-              <Request />
-            </Route>
+            <Route exact path="/" component={Request} />
+            <Route exact path="/results" component={Results} />
           </Switch>
         </Router>
       </main>

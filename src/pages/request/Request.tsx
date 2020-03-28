@@ -1,20 +1,24 @@
 import React from 'react';
 import logo from './../../assets/images/logo.png';
 import './Request.scss';
+import { Link } from 'react-router-dom';
+
 
 /**
- * Type my custom state
+ * Interfaces
  */
-type MyState = {
+interface MyProps { }
+
+interface MyState {
   search: string;
   bundles: any[];
 };
 
-class Request extends React.Component<{}, MyState> {
+export default class Request extends React.Component<MyProps, MyState> {
 
   private timer: ReturnType<typeof setTimeout> = setTimeout(() => '', 200);
 
-  constructor(props: {}) {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       search: '',
@@ -32,13 +36,6 @@ class Request extends React.Component<{}, MyState> {
   }
 
   /**
-   * Redirect to the bundle details page after user has selected a bundle
-   */
-  public getBundleDetails(bundle: any): void {
-    window.location.href = `/results?b=${bundle.name}&v=@${bundle.version}`;
-  }
-
-  /**
    * Set the correct value to the State
    */
   private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -53,7 +50,7 @@ class Request extends React.Component<{}, MyState> {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.getBundleList();
-    }, 200);
+    }, 500);
   }
 
   /**
@@ -88,10 +85,12 @@ class Request extends React.Component<{}, MyState> {
           {this.state.bundles.length ?
             <ul className="auto-complete">
               {this.state.bundles.map((bundle, i) =>
-                <li className="bundle" key={i} onClick={(event) => this.getBundleDetails(bundle)}>
-                  <div className="name">{bundle.name}</div>
-                  <div className="desc">{bundle.description}</div>
-                  <div className="version">@{bundle.version}</div>
+                <li className="bundle" key={i}>
+                  <Link to={`/results?b=${bundle.name}&v=${bundle.version}`}>
+                    <div className="name">{bundle.name}</div>
+                    <div className="desc">{bundle.description}</div>
+                    <div className="version">@{bundle.version}</div>
+                  </Link>
                 </li>
               )}
             </ul>
@@ -100,5 +99,3 @@ class Request extends React.Component<{}, MyState> {
       </main>);
   }
 }
-
-export default Request;
