@@ -1,10 +1,13 @@
 const fs = require('fs');
 const tmpDir = './tmp';
 
+/**
+ * Clean the tmp folder whe we are done
+ */
 const clean = () => {
   deleteFolderRecursive(tmpDir);
   console.log('/tmp folder cleaned');
-}
+};
 
 const deleteFolderRecursive = (path) => {
   if (fs.existsSync(path)) {

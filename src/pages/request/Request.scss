@@ -1,28 +1,12 @@
 @import './../../assets/scss/colors';
 
 .request {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   min-height: 100vh;
 
   .logo-graphic {
     pointer-events: none;
     animation: app-logo-shake infinite 1s linear;
-  }
-
-  .logo-name span {
-    font-size: 3rem;
-    font-family: 'Roboto-Bold';
-
-    &:last-child {
-      color: $red;
-    }
-  }
-
-  .subtitle {
-    text-align: center;
   }
 
   form {
@@ -32,8 +16,6 @@
 
     input {
       padding: .5rem 1rem;
-      font-size: 1.5rem;
-      text-align: center;
       width: 100%;
       box-sizing: border-box; // so the input does not overflow the form
     }
@@ -60,20 +42,11 @@
           background: $grey-lighter;
         }
 
-        .name {
-          font-family: 'Roboto-Bold';
-        }
-
-        .desc {
-          font-size: 12px;
-        }
-
         .version {
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
           right: .5rem;
-          font-size: .8rem;
         }
       }
     }

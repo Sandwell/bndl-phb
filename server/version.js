@@ -7,10 +7,26 @@ const version = (versions) => {
   let previousMajorVersion;
   let previousMajorVersionFound = false;
   Object.keys(versions)
-    // Sort all versions by number because sometimes some patches are realeased after a next major version
-    // The minus operator will cast the string into a number
+    // Sort all versions by number because the list provided by NPM registry is not ordered
+    // and does not contain dates.
     .sort((a, b) => {
-      return concatVersion(b) - concatVersion(a);
+      const aArr = transformVersion(a);
+      const bArr = transformVersion(b);
+      if (bArr[0] > aArr[0]) {
+        return 1;
+      } else if (bArr[0] < aArr[0]) {
+        return -1;
+      }
+      if (bArr[1] > aArr[1]) {
+        return 1;
+      } else if (bArr[1] < aArr[1]) {
+        return -1;
+      }
+      if (bArr[2] > aArr[2]) {
+        return 1;
+      } else if (bArr[2] < aArr[2]) {
+        return -1;
+      }
     })
     .some((v, i) => {
       const vArr = v.split('.');
@@ -35,13 +51,14 @@ const version = (versions) => {
       }
     });
   return filteredVersions;
-}
+};
 
 /**
- * Transform version into workable string
+ * Transform version
  */
-const concatVersion = (version) => {
-  return +version.split('-')[0].split('.').join('');
-}
+const transformVersion = (version) => {
+  let v = version.split('-')[0].split('.');
+  return v.map(x => +x);
+};
 
 module.exports = version;

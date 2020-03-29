@@ -18,9 +18,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "terser-webpack-plugin": "^2.3.5",
     "typescript": "^3.7.5",
-    "webpack": "^4.42.1"
+    "webpack": "^4.42.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -45,5 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "terser-webpack-plugin": "^2.3.5"
+  }
 }

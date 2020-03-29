@@ -1,0 +1,58 @@
+@import './../../assets/scss/colors';
+
+.results {
+  width: 100%;
+
+  .loader {
+    justify-content: center;
+    min-height: 100vh;
+
+    img {
+      width: 100px;
+    }
+  }
+
+  .wrapper {
+    margin: 3rem 0;
+  }
+
+  .chart {
+    .bar-wrapper {
+      width: 100%;
+      margin-bottom: .5rem;
+      filter: brightness(1);
+      transition: .5s;
+
+      &:hover {
+        filter: brightness(.95);
+
+        .tooltip {
+          opacity: 1;
+        }
+      }
+
+      .bar {
+        display: block;
+        height: 2rem;
+        cursor: pointer;
+        position: relative;
+
+        &.gzip-bar {
+          border-radius: 4px 0 0 4px;
+        }
+
+        &.min-bar {
+          border-radius: 0 4px 4px 0;
+        }
+
+        .format {
+          color: white;
+          position: absolute;
+          left: .5rem;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}

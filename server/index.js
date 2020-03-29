@@ -39,45 +39,62 @@ app.get('/api/getBundleDetails/', (req, res) => {
       const filteredVersions = version(bundleDetails.versions);
       console.log('filteredVersions', filteredVersions);
 
-      // Clean tmp folder
-      clean();
-
       // Install bundles in tmp directory
-      const installPromises = filteredVersions.map((bundleVersion, i) => {
-
+      const installPromises = filteredVersions.map((bundleVersion) => {
         return install(bundleName, bundleVersion);
-
       });
 
-      Promise.all(installPromises).then(_ => {
-        console.log('all bundles are installed');
-
-        const buildPromises = filteredVersions.map((bundleVersion, i) => {
-
-          return build(bundleName, bundleVersion);
-
-        });
-
-        Promise.all(buildPromises).then(_ => {
-          console.log('all bundles are built');
-          filteredVersions.map((bundleVersion, i) => {
-
-            bundlesInfos.push(stats(bundleName, bundleVersion));
-
+      Promise.all(installPromises)
+        .then(_ => {
+          console.log('all bundles are installed');
+          // Build bundles
+          const buildPromises = filteredVersions.map((bundleVersion) => {
+            return build(bundleName, bundleVersion);
           });
-        })
-      });
 
-      console.log('bundlesInfos', bundlesInfos);
-
-      res.json(bundleDetails.versions);
+          Promise.all(buildPromises).then(_ => {
+            console.log('all bundles are built');
+            // Get bundles stats
+            filteredVersions.map((bundleVersion, i) => {
+              bundlesInfos.push(stats(bundleName, bundleVersion));
+            });
+            endProcess(bundlesInfos);
+            // Catch for build promises
+          }).catch(error => {
+            console.log('Error in build promises', error);
+            endProcess({
+              error: {
+                status: 500,
+                details: 'Webpack build failed'
+              }
+            });
+          });
+          // Catch for install promies
+        }).catch(error => {
+          console.log('Error in install promises', error);
+          endProcess({
+            error: {
+              status: 500,
+              details: 'npm install failed'
+            }
+          });
+        });
     } else {
-      // Error
-      res.json({
-        error: 'Bundle not found'
+      endProcess({
+        error: {
+          status: 404,
+          details: 'Bundle not found'
+        }
       });
     }
   });
+
+  const endProcess = (obj) => {
+    clean();
+    console.log('done ->', obj);
+    res.json(obj);
+  };
+
 });
 
 /**

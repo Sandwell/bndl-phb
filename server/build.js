@@ -3,11 +3,14 @@ const path = require('path');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 
+/**
+ * Build package into bundle by creating a file requiring the package
+ * and then build it with webpack
+ */
 const build = (bundleName, bundleVersion) => {
 
   return new Promise((resolve, reject) => {
-    const bundleNoSlash = bundleName.replace('/', '');
-    const installPath = path.resolve(`./tmp/${bundleNoSlash}-${bundleVersion}`);
+    const installPath = path.resolve('./tmp/', bundleVersion);
     const requiredImport = `const bundle = require('./node_modules/${bundleName}');`;
 
     const getWebPackConfig = (externals) => {
@@ -21,7 +24,7 @@ const build = (bundleName, bundleVersion) => {
         externals: externals ? externals : {},
         optimization: {
           minimize: true,
-          minimizer: [new TerserPlugin()]
+          minimizer: [new TerserPlugin({})]
         }
       }
     };
@@ -34,19 +37,22 @@ const build = (bundleName, bundleVersion) => {
         webpack(getWebPackConfig(externals), (err, stats) => {
           if (err || stats.hasErrors()) {
             console.log('Error in build.js', stats.compilation.errors);
+            return reject(err || stats.compilation.errors);
           } else {
-            return resolve(stats);
+            return resolve();
           }
         })
       } else {
-        return resolve(stats);
+        return resolve();
       }
     });
-  });
-
-
+  }).catch();
 };
 
+/**
+ * Sometimes a package needs externals bundles to compile
+ * so we need to exclude them in order to evaluate the right bundle
+ */
 const getBundlesNotFound = (errors) => {
   const externals = {};
   errors.map((error, i) => {
@@ -57,6 +63,6 @@ const getBundlesNotFound = (errors) => {
   });
   console.log('externals', externals);
   return externals;
-}
+};
 
 module.exports = build;

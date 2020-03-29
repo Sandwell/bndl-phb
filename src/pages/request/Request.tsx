@@ -73,29 +73,30 @@ export default class Request extends React.Component<MyProps, MyState> {
    */
   public render(): JSX.Element {
     return (
-      <main className="request">
+      <div className="request d-flex flex-column align-center">
         <img src={logo} className="logo-graphic" alt="logo" />
-        <div className="logo-name">
-          <span>BUNDLE</span>
-          <span>CRINGE</span>
+        <div>
+          <span className="roboto-bold fs-12">BUNDLE</span>
+          <span className="roboto-bold fs-12 text-red">CRINGE</span>
         </div>
-        <p className="subtitle">Do not take the risk to add an heavy package to use 10% of it.</p>
+        <p>Do not take the risk to add an heavy package to use 10% of it.</p>
         <form>
-          <input autoComplete="off" name="library" type="text" value={this.state.search} onChange={(event) => this.handleChange(event)} placeholder="find package" />
-          {this.state.bundles.length ?
+          <input className="text-center fs-8" autoComplete="off" name="library" type="text" value={this.state.search} onChange={(event) => this.handleChange(event)} placeholder="find package" />
+          {this.state.bundles.length > 0 &&
             <ul className="auto-complete">
               {this.state.bundles.map((bundle, i) =>
                 <li className="bundle" key={i}>
                   <Link to={`/results?b=${bundle.name}&v=${bundle.version}`}>
-                    <div className="name">{bundle.name}</div>
-                    <div className="desc">{bundle.description}</div>
-                    <div className="version">@{bundle.version}</div>
+                    <div className="roboto-bold">{bundle.name}</div>
+                    <div className="fs-4">{bundle.description}</div>
+                    <div className="fs-4 version">@{bundle.version}</div>
                   </Link>
                 </li>
               )}
             </ul>
-            : null}
+          }
         </form>
-      </main>);
+      </div>
+    );
   }
 }

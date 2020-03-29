@@ -1,0 +1,47 @@
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.width-100 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.width-50 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.width-25 {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.roboto {
+  font-family: 'Roboto';
+  font-weight: normal;
+}
+
+.roboto-bold {
+  font-family: 'Roboto-Bold';
+  font-weight: bold;
+}
+
+.align-center {
+  align-items: center;
+}
+
+@for $i from 1 through 12 {
+  .fs-#{$i} {
+    font-size: 0rem + $i/5;
+    line-height: .2rem + $i/5;
+  }
+}

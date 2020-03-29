@@ -1,4 +1,38 @@
 $grey: #282c34;
+$grey-light: #b1b1b1;
 $grey-lighter: #dedede;
 $grey-lightest: #fcfafc;
 $red: #dc2e2e;
+$blue: #65c3f8;
+$blue-dark: #65a1f8;
+
+.text-red {
+  color: $red;
+}
+
+$colorArray: ("grey": $grey,
+  "grey-light": $grey-light,
+  "grey-lighter": $grey-lighter,
+  "grey-lightest": $grey-lightest,
+  "red": $red,
+  "blue": $blue,
+  "blue-dark": $blue-dark);
+
+@mixin colors-helper {
+
+  @each $key,
+  $color in $colorArray {
+    .bg-#{$key} {
+      background-color: #{$color};
+    }
+  }
+
+  @each $key,
+  $color in $colorArray {
+    .text-#{$key} {
+      color: #{$color};
+    }
+  }
+}
+
+@include colors-helper;
