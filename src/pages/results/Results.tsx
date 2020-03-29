@@ -116,10 +116,10 @@ export default class Results extends React.Component<MyProps, MyState> {
                       <div className="chart d-flex flex-column" key={i}>
                         <span className="fs-4">{bundleInfo.bundleVersion}</span>
                         <div className="bar-wrapper d-flex">
-                          <span className="bar gzip-bar bg-blue-dark" style={{ width: (bundleInfo.gzip * this.state.refSize) / 100 + '%' }}>
+                          <span className="bar gzip-bar bg-blue-dark" style={{ width: (bundleInfo.gzip * 100) / this.state.refSize + '%' }}>
                             <span className="format fs-4">gzip : {bundleInfo.gzip}kB</span>
                           </span>
-                          <span className="bar min-bar bg-blue" style={{ width: (bundleInfo.min * this.state.refSize) / 100 + '%' }}>
+                          <span className="bar min-bar bg-blue" style={{ width: ((bundleInfo.min * 100) / this.state.refSize) - ((bundleInfo.gzip * 100) / this.state.refSize) + '%' }}>
                             <span className="format fs-4">min : {bundleInfo.min}kB</span>
                           </span>
                         </div>
