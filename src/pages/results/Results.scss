@@ -56,3 +56,17 @@
     }
   }
 }
+
+@media (max-width: 550px) {
+  .results {
+    .width-50 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .format {
+      font-size: 0.6rem;
+      line-height: 0.8rem;
+    }
+  }
+}

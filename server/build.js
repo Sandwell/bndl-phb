@@ -8,7 +8,6 @@ const TerserPlugin = require('terser-webpack-plugin');
  * and then build it with webpack
  */
 const build = (bundleName, bundleVersion) => {
-
   return new Promise((resolve, reject) => {
     const installPath = path.resolve('./tmp/', bundleVersion);
     const requiredImport = `const bundle = require('./node_modules/${bundleName}');`;

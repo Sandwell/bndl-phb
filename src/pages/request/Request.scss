@@ -4,7 +4,7 @@
   justify-content: center;
   min-height: 100vh;
 
-  .logo-graphic {
+  .logo {
     pointer-events: none;
     animation: app-logo-shake infinite 1s linear;
   }
@@ -52,6 +52,12 @@
     }
   }
 
+}
+
+@media (max-width: 550px) {
+  .request form {
+    width: auto;
+  }
 }
 
 @keyframes app-logo-shake {

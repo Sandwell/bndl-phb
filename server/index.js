@@ -27,6 +27,8 @@ app.get('/api/getBundleList', (req, res) => {
  * Endpoint that return bundle infos
  */
 app.get('/api/getBundleDetails/', (req, res) => {
+  clean();
+  console.log('Remove tmp folder');
   const bundleName = req.query.bundleName;
   const bundlesInfos = [];
   request.get(`https://registry.npmjs.org/${bundleName}`, (error, response, body) => {
@@ -37,24 +39,26 @@ app.get('/api/getBundleDetails/', (req, res) => {
     if (!bundleDetails.error) {
       // Process versions
       const filteredVersions = version(bundleDetails.versions);
-      console.log('filteredVersions', filteredVersions);
+      console.log('Filtered versions', filteredVersions);
 
       // Install bundles in tmp directory
+      console.log('Installing...');
       const installPromises = filteredVersions.map((bundleVersion) => {
         return install(bundleName, bundleVersion);
       });
 
       Promise.all(installPromises)
         .then(_ => {
-          console.log('all bundles are installed');
+          console.log('All bundles are installed');
           // Build bundles
           const buildPromises = filteredVersions.map((bundleVersion) => {
             return build(bundleName, bundleVersion);
           });
-
+          console.log('Building...');
           Promise.all(buildPromises).then(_ => {
-            console.log('all bundles are built');
+            console.log('All bundles are built');
             // Get bundles stats
+            console.log('Getting stats...');
             filteredVersions.map((bundleVersion, i) => {
               bundlesInfos.push(stats(bundleName, bundleVersion));
             });
@@ -90,7 +94,6 @@ app.get('/api/getBundleDetails/', (req, res) => {
   });
 
   const endProcess = (obj) => {
-    clean();
     console.log('done ->', obj);
     res.json(obj);
   };

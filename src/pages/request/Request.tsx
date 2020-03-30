@@ -38,7 +38,7 @@ export default class Request extends React.Component<MyProps, MyState> {
   /**
    * Set the correct value to the State
    */
-  private handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  public handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({ search: event.target.value });
   }
 
@@ -74,12 +74,12 @@ export default class Request extends React.Component<MyProps, MyState> {
   public render(): JSX.Element {
     return (
       <div className="request d-flex flex-column align-center">
-        <img src={logo} className="logo-graphic" alt="logo" />
+        <img src={logo} className="logo" alt="logo" />
         <div>
           <span className="roboto-bold fs-12">BUNDLE</span>
           <span className="roboto-bold fs-12 text-red">CRINGE</span>
         </div>
-        <p>Do not take the risk to add an heavy package to use 10% of it.</p>
+        <p className="text-center">Do not take the risk to add an heavy package to use 10% of it.</p>
         <form>
           <input className="text-center fs-8" autoComplete="off" name="library" type="text" value={this.state.search} onChange={(event) => this.handleChange(event)} placeholder="find package" />
           {this.state.bundles.length > 0 &&

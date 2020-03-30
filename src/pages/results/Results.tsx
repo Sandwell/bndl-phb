@@ -40,6 +40,10 @@ export default class Results extends React.Component<MyProps, MyState> {
     this.getBundleDetails();
   }
 
+  /**
+   * Call Back-End at page load so the user can refresh it
+   * or change param a get results without going on request page
+   */
   private getBundleDetails(): void {
     fetch(`/api/getBundleDetails?bundleName=${this.bundleName}`)
       .then(res => res.json())
@@ -55,7 +59,7 @@ export default class Results extends React.Component<MyProps, MyState> {
               });
             }
           });
-          this.getBarSizes();
+          this.getRefSizeBar();
         } else {
           this.setState({
             isLoading: false,
@@ -65,7 +69,13 @@ export default class Results extends React.Component<MyProps, MyState> {
       });
   }
 
-  private getBarSizes(): void {
+  /**
+   * Get the heaviest file size as reference to create
+   * the chart later.
+   * Basically we get the heaviest bundle and then get
+   * his minified size.
+   */
+  private getRefSizeBar(): void {
     if (this.state.bundlesInfos) {
       this.state.bundlesInfos.forEach((bundleInfo, i) => {
         if (this.maxSize < bundleInfo.gzip + bundleInfo.min) {
@@ -77,9 +87,13 @@ export default class Results extends React.Component<MyProps, MyState> {
     }
   }
 
+  /**
+   * Classic render method
+   */
   public render(): JSX.Element {
     return (
       <div className="results">
+        {/* Is data loading */}
         {this.state.isLoading ?
           <div className="d-flex flex-column align-center loader">
             <img src={loader} alt="logo" />
@@ -87,6 +101,7 @@ export default class Results extends React.Component<MyProps, MyState> {
           </div>
           :
           <div>
+            {/* Check if we got infos we need before displaying */}
             {this.state.requestedBundle && this.state.bundlesInfos && this.state.bundlesInfos.length > 0 ?
               <div>
                 <h1 className="roboto-bold text-center fs-12">{this.state.requestedBundle.bundleName}@{this.state.requestedBundle.bundleVersion}</h1>
@@ -112,6 +127,7 @@ export default class Results extends React.Component<MyProps, MyState> {
                   </div>
                   <div className="wrapper width-100">
                     <h3 className="roboto text-center roboto fs-8 text-grey-light">COMPARISON WITH PREVIOUS VERSIONS</h3>
+                    {/* Loop on bundles infos */}
                     {this.state.bundlesInfos.map((bundleInfo, i) =>
                       <div className="chart d-flex flex-column" key={i}>
                         <span className="fs-4">{bundleInfo.bundleVersion}</span>
@@ -129,6 +145,7 @@ export default class Results extends React.Component<MyProps, MyState> {
                 </div>
               </div> :
               <div className="d-flex flex-column align-center">
+                {/* Error handler */}
                 <img src={logo} className="logo-graphic" alt="logo" />
                 <div className="logo-name">
                   <span className="roboto-bold fs-12">OUPS ! SOMETHING WENT </span>

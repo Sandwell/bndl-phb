@@ -6,7 +6,6 @@ const tmpDir = './tmp';
  */
 const clean = () => {
   deleteFolderRecursive(tmpDir);
-  console.log('/tmp folder cleaned');
 };
 
 const deleteFolderRecursive = (path) => {

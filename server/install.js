@@ -7,7 +7,7 @@ const path = require('path');
 const install = (bundleName, bundleVersion) => {
   return new Promise((resolve, reject) => {
     const installPath = path.resolve('./tmp/', bundleVersion);
-    childProcess.exec(`npm install ${bundleName}@${bundleVersion} --prefix ${installPath} --no-package-lock --progress false --loglevel error`, (error, stdout, stderr) => {
+    childProcess.exec(`npm install ${bundleName}@${bundleVersion} --prefix ${installPath} --no-package-lock --progress false`, (error, stdout, stderr) => {
       if (error) {
         console.warn('Error in install.js', error);
         return reject(error);
