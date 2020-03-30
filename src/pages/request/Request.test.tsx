@@ -5,15 +5,15 @@ import Request from './Request';
 const component = shallow(<Request />);
 
 test('Request loads correctly', () => {
-  expect(component.find('.request')).toBeTruthy();
+  expect(component.find('.request').exists()).toBeTruthy();
 });
 
 test('Logo loads correctly', () => {
-  expect(component.find('.logo')).toBeTruthy();
+  expect(component.find('.logo').exists()).toBeTruthy();
 });
 
 test('Input loads correctly', () => {
-  expect(component.find('input')).toBeTruthy();
+  expect(component.find('input').exists()).toBeTruthy();
 });
 
 test('Write in input', () => {
