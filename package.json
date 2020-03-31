@@ -8,8 +8,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node server/index.js",
-    "start-app-and-server": "concurrently --kill-others \"npm run start\" \"npm run server\""
+    "server": "node server/index.js"
   },
   "dependencies": {
     "express": "^4.17.1"
