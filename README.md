@@ -14,8 +14,7 @@ You will also see any lint errors in the console.
 
 ### `npm run server`
 
-Runs the server on [http://localhost:8080].<br />
-
+Runs the server on [http://localhost:8080](http://localhost:8080).<br />
 It will display log on your console.<br />
 
 ### `npm test`
