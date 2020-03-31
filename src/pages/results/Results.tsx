@@ -11,7 +11,7 @@ interface Bundle { bundleName: string, bundleVersion: string, min: number, gzip:
 
 interface MyState {
   isLoading: boolean;
-  refSize: number,
+  refSizeBar: number,
   requestedBundle: Bundle | null,
   bundlesInfos: Bundle[] | null,
   error: { status: number, details: string }
@@ -23,7 +23,7 @@ export default class Results extends React.Component<MyProps, MyState> {
     super(props);
     this.state = {
       isLoading: true,
-      refSize: 0,
+      refSizeBar: 0,
       requestedBundle: null,
       bundlesInfos: null,
       error: { status: 0, details: '' }
@@ -48,16 +48,12 @@ export default class Results extends React.Component<MyProps, MyState> {
     fetch(`/api/getBundleDetails?bundleName=${this.bundleName}`)
       .then(res => res.json())
       .then((result) => {
-        // I know it's a bad error handling but I did not manage to send an error from Back-End
+        // I know it's a bad error handling but I did not manage to send a proper error from Back-End
         if (!result.error) {
-          result.forEach((bundle: Bundle) => {
-            if (bundle.bundleVersion === this.bundleVersion) {
-              this.setState({
-                isLoading: false,
-                bundlesInfos: result,
-                requestedBundle: bundle
-              });
-            }
+          this.setState({
+            isLoading: false,
+            bundlesInfos: result,
+            requestedBundle: result.find((bundle: Bundle) => bundle.bundleVersion === this.bundleVersion)
           });
           this.getRefSizeBar();
         } else {
@@ -70,10 +66,8 @@ export default class Results extends React.Component<MyProps, MyState> {
   }
 
   /**
-   * Get the heaviest file size as reference to create
-   * the chart later.
-   * Basically we get the heaviest bundle and then get
-   * his minified size.
+   * Get the heaviest file size as reference to create the chart.
+   * Basically we get the heaviest bundle and then get his minified size.
    */
   private getRefSizeBar(): void {
     if (this.state.bundlesInfos) {
@@ -83,7 +77,7 @@ export default class Results extends React.Component<MyProps, MyState> {
           this.biggestBundle = i;
         }
       });
-      this.setState({ refSize: this.state.bundlesInfos[this.biggestBundle].min });
+      this.setState({ refSizeBar: this.state.bundlesInfos[this.biggestBundle].min });
     }
   }
 
@@ -132,10 +126,10 @@ export default class Results extends React.Component<MyProps, MyState> {
                       <div className="chart d-flex flex-column" key={i}>
                         <span className="fs-4">{bundleInfo.bundleVersion}</span>
                         <div className="bar-wrapper d-flex">
-                          <span className="bar gzip-bar bg-blue-dark" style={{ width: (bundleInfo.gzip * 100) / this.state.refSize + '%' }}>
+                          <span className="bar gzip-bar bg-blue-dark" style={{ width: (bundleInfo.gzip * 100) / this.state.refSizeBar + '%' }}>
                             <span className="format fs-4">gzip : {bundleInfo.gzip}kB</span>
                           </span>
-                          <span className="bar min-bar bg-blue" style={{ width: ((bundleInfo.min * 100) / this.state.refSize) - ((bundleInfo.gzip * 100) / this.state.refSize) + '%' }}>
+                          <span className="bar min-bar bg-blue" style={{ width: ((bundleInfo.min * 100) / this.state.refSizeBar) - ((bundleInfo.gzip * 100) / this.state.refSizeBar) + '%' }}>
                             <span className="format fs-4">min : {bundleInfo.min}kB</span>
                           </span>
                         </div>
