@@ -2,12 +2,15 @@ const express = require('express');
 const path = require('path');
 const request = require('request');
 const app = express();
+const NodeCache = require('node-cache');
+const cache = new NodeCache();
 
 const version = require('./version');
 const clean = require('./clean');
 const install = require('./install');
 const build = require('./build');
 const stats = require('./stats');
+
 
 /**
  * Serve the static files from the React Server
@@ -27,19 +30,28 @@ app.get('/api/getBundleList', (req, res) => {
  * Endpoint that return bundle infos
  */
 app.get('/api/getBundleDetails/', (req, res) => {
-  clean();
-  console.log('Remove tmp folder');
+
   const bundleName = req.query.bundleName;
   const bundlesInfos = [];
+
+  const foundInCache = cache.get(bundleName);
+  if (foundInCache) {
+    console.log('Found in cache !', foundInCache)
+    res.json(foundInCache);
+    return;
+  }
+
   request.get(`https://registry.npmjs.org/${bundleName}`, (error, response, body) => {
+
     if (error) {
       return console.log('Error in index.js', error);
     }
     const bundleDetails = JSON.parse(body);
     if (!bundleDetails.error) {
+
       // Process versions
       const filteredVersions = version(bundleDetails.versions);
-      console.log('Filtered versions', filteredVersions);
+      console.log('Filtered versions for ', bundleName, filteredVersions);
 
       // Install bundles in tmp directory
       console.log('Installing...');
@@ -62,6 +74,8 @@ app.get('/api/getBundleDetails/', (req, res) => {
             filteredVersions.map((bundleVersion, i) => {
               bundlesInfos.push(stats(bundleName, bundleVersion));
             });
+
+            cache.set(bundleName, bundlesInfos);
             endProcess(bundlesInfos);
             // Catch for build promises
           }).catch(error => {
@@ -94,6 +108,8 @@ app.get('/api/getBundleDetails/', (req, res) => {
   });
 
   const endProcess = (obj) => {
+    console.log('Remove tmp folder');
+    clean();
     console.log('done ->', obj);
     res.json(obj);
   };
