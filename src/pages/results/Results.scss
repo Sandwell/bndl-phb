@@ -1,7 +1,8 @@
 @import './../../assets/scss/colors';
 
 .results {
-  width: 100%;
+  min-height: 100vh;
+  padding-top: 2rem;
 
   .loader {
     justify-content: center;
@@ -10,6 +11,10 @@
     img {
       width: 100px;
     }
+  }
+
+  h1 {
+    margin-top: 0;
   }
 
   .wrapper {

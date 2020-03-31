@@ -1,11 +1,9 @@
 body {
-  margin: 0 auto;
-  font-family: 'Roboto', sans-serif;
-  color: #282c34;
+  margin: 0;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
-  max-width: 1200px;
 }
 
 @font-face {

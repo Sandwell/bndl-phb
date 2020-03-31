@@ -13,12 +13,14 @@ class App extends React.Component<{}, {}> {
   public render(): JSX.Element {
     return (
       <main className="app">
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Request} />
-            <Route exact path="/results" component={Results} />
-          </Switch>
-        </Router>
+        <div className="app-wrapper">
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Request} />
+              <Route exact path="/results" component={Results} />
+            </Switch>
+          </Router>
+        </div>
       </main>
     );
   }
