@@ -2,7 +2,6 @@
 
 .results {
   min-height: 100vh;
-  padding-top: 4rem;
 
   .loader {
     justify-content: center;
@@ -11,10 +10,6 @@
     img {
       width: 100px;
     }
-  }
-
-  h1 {
-    margin-top: 0;
   }
 
   .wrapper {
